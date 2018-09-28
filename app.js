@@ -1,31 +1,10 @@
+
 var express = require("express");
-const path = require("path");
+var request = require('request');
 
 var app = express();
-var contacts =[
-    {
-        name:'Mike Segovia',
-        img: 'http://api.randomuser.me/portraits/men/49.jpg',
-        num: '618 117 71 53',
-        email: 'miguel.segovia@g-tec.io',
-        cUrl: 'https://g-tecio.atlassian.net/wiki/spaces/~380176380/overview',
-    },
-    {
-        name:'Rocio Dominguez',
-        img: 'http://api.randomuser.me/portraits/women/76.jpg',
-        cUrl: 'https://g-tecio.atlassian.net/wiki/spaces/~380176380/overview',
-        num: '618 117 71 53',
-        email: 'miguel.segovia@g-tec.io',
-        
-    },
-    {
-        name:'Martha Lucia',
-        img: 'http://api.randomuser.me/portraits/women/34.jpg',
-        cUrl: 'https://g-tecio.atlassian.net/wiki/spaces/~380176380/overview',
-        num: '618 117 71 53',
-        email: 'miguel.segovia@g-tec.io',
-    }
-]
+var urlAPI= 'https://9mwpc4h2r1.execute-api.us-east-2.amazonaws.com/dev/team3function'
+var contacts = {}
 //settings
 app.set("port", process.env.PORT || 3000)
 app.set('view engine', 'ejs')
@@ -33,8 +12,17 @@ app.set('view engine', 'ejs')
 //Middlewares
 app.use(express.json());
 
+loadData()
 //Routes
 app.get("/", async (req, res) => {
+    request.get(urlAPI, (err, res, body) => {
+        if (err) {
+            return console.dir(err);
+        }
+ 
+        contacts = JSON.parse(body);
+        contacts = contacts.reverse();
+    });
     res.render('index',{contacts:contacts});
   });
 
@@ -46,3 +34,6 @@ app.listen(3000, () => {
     console.log("Server on Port", app.get("port"));
   });
   
+  function loadData(){
+  
+  }
